@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3"
+import { useRecaptcha } from '@/components/recaptcha-provider';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -25,7 +25,7 @@ const formSchema = z.object({
 })
 
 export function LoginForm() {
-  const { executeRecaptcha } = useGoogleReCaptcha()
+  const { executeRecaptcha } = useRecaptcha();
   const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
