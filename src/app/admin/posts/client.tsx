@@ -8,11 +8,9 @@ import { Button } from '@/components/ui/button';
 
 import PostForm from '@/components/post-form';
 import ActionButtons from '@/components/action-buttons';
-import dynamic from 'next/dynamic';
+import DataTable from '@/components/data-table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-
-const DataTable = dynamic(() => import('react-data-table-component'), { ssr: false });
 
 export default function PostsClient({ posts, categories }: { posts: any[]; categories: any[] }) {
 	const [open, setOpen] = useState(false);
