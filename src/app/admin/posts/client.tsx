@@ -5,11 +5,14 @@ import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+
 import PostForm from '@/components/post-form';
 import ActionButtons from '@/components/action-buttons';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import dynamic from 'next/dynamic';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+
+const DataTable = dynamic(() => import('react-data-table-component'), { ssr: false });
 
 export default function PostsClient({ posts, categories }: { posts: any[]; categories: any[] }) {
 	const [open, setOpen] = useState(false);
@@ -30,6 +33,32 @@ export default function PostsClient({ posts, categories }: { posts: any[]; categ
 		router.refresh();
 	}
 
+	const columns = [
+		{
+			name: 'Title',
+			selector: (row: any) => row.title,
+			sortable: true,
+		},
+		{
+			name: 'Slug',
+			selector: (row: any) => row.slug,
+			sortable: true,
+		},
+		{
+			name: 'Status',
+			selector: (row: any) => (row.published ? 'Published' : 'Draft'),
+			sortable: true,
+		},
+		{
+			name: 'Actions',
+			cell: (row: any) => (
+				<div className="flex justify-end w-full">
+					<ActionButtons viewUrl={`/posts/${row.slug}`} editUrl={`/admin/posts/${row.id}`} onDelete={() => handleDelete(row.id)} />
+				</div>
+			),
+		},
+	];
+
 	return (
 		<div>
 			<div className="flex justify-between items-center mb-6">
@@ -47,28 +76,36 @@ export default function PostsClient({ posts, categories }: { posts: any[]; categ
 				</Dialog>
 			</div>
 
-			<Table>
-				<TableHeader>
-					<TableRow>
-						<TableHead>Title</TableHead>
-						<TableHead>Slug</TableHead>
-						<TableHead>Status</TableHead>
-						<TableHead>Actions</TableHead>
-					</TableRow>
-				</TableHeader>
-				<TableBody>
-					{posts?.map((post) => (
-						<TableRow key={post.id}>
-							<TableCell>{post.title}</TableCell>
-							<TableCell>{post.slug}</TableCell>
-							<TableCell>{post.published ? 'Published' : 'Draft'}</TableCell>
-							<TableCell>
+			{/* Desktop View */}
+			<div className="hidden md:block rounded-md border">
+				<DataTable columns={columns} data={posts} pagination persistTableHead />
+			</div>
+
+			{/* Mobile View */}
+			<div className="grid gap-4 md:hidden">
+				{posts?.map((post) => (
+					<Card key={post.id}>
+						<CardHeader>
+							<CardTitle>{post.title}</CardTitle>
+						</CardHeader>
+						<CardContent className="space-y-2">
+							<div className="flex justify-between text-sm">
+								<span className="text-muted-foreground">Slug:</span>
+								<span className="font-mono">{post.slug}</span>
+							</div>
+							<div className="flex justify-between text-sm">
+								<span className="text-muted-foreground">Status:</span>
+								<span>{post.published ? 'Published' : 'Draft'}</span>
+							</div>
+						</CardContent>
+						<CardFooter>
+							<div className="flex justify-end w-full">
 								<ActionButtons viewUrl={`/posts/${post.slug}`} editUrl={`/admin/posts/${post.id}`} onDelete={() => handleDelete(post.id)} />
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+							</div>
+						</CardFooter>
+					</Card>
+				))}
+			</div>
 		</div>
 	);
 }
