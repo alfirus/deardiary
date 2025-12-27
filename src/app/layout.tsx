@@ -11,8 +11,8 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Blog App",
-  description: "A blog app built with Next.js and Supabase",
+	title: 'Dear Diary',
+	description: 'A blog app built with Next.js and Supabase',
 };
 
 export default function RootLayout({

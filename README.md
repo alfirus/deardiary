@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DearDiary
+
+A modern, feature-rich blog and diary application built with Next.js, Supabase, and Tailwind CSS.
+
+## Features
+
+- **Authentication & User Profiles**: Secure authentication powered by Supabase Auth with custom user profiles.
+- **Role-Based Access Control**: Granular permissions for Admins and standard Users.
+- **Content Management**:
+  - create, edit, and delete posts (Admin).
+  - Categorize posts with custom categories.
+  - Featured images and rich text support.
+  - Draft/Publish workflows.
+- **Interactive Comments**: Threaded comment system allowing users to engage with posts.
+- **Media Management**: Centralized media handling.
+- **Modern UI/UX**:
+  - Responsive design using **Tailwind CSS v4**.
+  - Accessible components via **Shadcn UI**.
+  - Smooth animations and transitions.
+
+## Tech Stack
+
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Database & Auth**: [Supabase](https://supabase.com/)
+- **Components**: Shadcn UI (Radix Primitives)
+- **Forms**: React Hook Form + Zod
+- **Icons**: Lucide React
+
+## Requirements
+
+Before you begin, ensure you have the following:
+
+- **Node.js**: Version 18 or higher.
+- **Supabase Project**: Create a new project at [database.new](https://database.new/).
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd deardiary
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Environment Setup
+
+Create a `.env.local` file in the root directory and add your environment variables. You can use `example.env` as a template:
+
+```bash
+cp example.env .env.local
+```
+
+Fill in the following details:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your-recaptcha-site-key
+```
+
+### 4. Database Setup
+
+1. Go to your Supabase project dashboard.
+2. Navigate to the **SQL Editor**.
+3. Copy the contents of `schema.sql` from this project.
+4. Paste it into the SQL Editor and run it. This will create all necessary tables, policies, and triggers.
+
+### 5. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run dev`: Runs the app in development mode.
+- `npm run build`: Builds the app for production.
+- `npm run start`: Starts the production server.
+- `npm run lint`: Runs ESLint to check for code quality issues.

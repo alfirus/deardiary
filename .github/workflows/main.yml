@@ -31,8 +31,8 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 22
         script: |
-          rm -rf /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/
-          mkdir -p /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/
+          rm -rf /home/alfirus/htdocs/alfirus.my/
+          mkdir -p /home/alfirus/htdocs/alfirus.my/
 
     - name: Deploy via SCP
       uses: appleboy/scp-action@v0.1.7
@@ -42,7 +42,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         port: 22
         source: "."
-        target: "/home/aerosgeotech-system/htdocs/system.aerosgeotech.com/"
+        target: "/home/alfirus/htdocs/alfirus.my/"
         strip_components: 0
 
     - name: Execute Remote Commands
@@ -54,8 +54,8 @@ jobs:
         port: 22
         script: |
           # Restore Env Files
-          cp /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/.env /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/ || true
-          cp /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/.env.local /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/ || true
+          cp /home/alfirus/htdocs/alfirus.my_env_backup/.env /home/alfirus/htdocs/alfirus.my/ || true
+          cp /home/alfirus/htdocs/alfirus.my_env_backup/.env.local /home/alfirus/htdocs/alfirus.my/ || true
           
           # Load Environment
           export NVM_DIR="$HOME/.nvm"
@@ -63,7 +63,7 @@ jobs:
           [ -s "$HOME/.bashrc" ] && source $HOME/.bashrc
 
           # Build
-          cd /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/
+          cd /home/alfirus/htdocs/alfirus.my/
           npm install
           npm run build
           pm2 reload all
