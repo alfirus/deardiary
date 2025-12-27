@@ -23,23 +23,25 @@ type Comment = {
 
 function CommentItem({ comment, onReply }: { comment: Comment, onReply: (id: number) => void }) {
   return (
-    <div className="border-l-2 border-muted pl-4 py-2 my-4">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="font-bold">{comment.profiles?.display_name || "User"}</span>
-        <span className="text-xs text-muted-foreground">{new Date(comment.created_at).toLocaleDateString()}</span>
-      </div>
-      <p className="mb-2">{comment.content}</p>
-      <Button variant="ghost" size="sm" onClick={() => onReply(comment.id)}>Reply</Button>
+			<div className="border-l-2 border-muted pl-4 py-2 my-4">
+				<div className="flex items-center gap-2 mb-2">
+					<span className="font-bold">{comment.profiles?.display_name || 'User'}</span>
+					<span className="text-muted-foreground">{new Date(comment.created_at).toLocaleDateString()}</span>
+				</div>
+				<p className="mb-2">{comment.content}</p>
+				<Button variant="ghost" size="sm" onClick={() => onReply(comment.id)}>
+					Reply
+				</Button>
 
-      {comment.children && comment.children.length > 0 && (
-        <div className="ml-4">
-          {comment.children.map(child => (
-            <CommentItem key={child.id} comment={child} onReply={onReply} />
-          ))}
-        </div>
-      )}
-    </div>
-  )
+				{comment.children && comment.children.length > 0 && (
+					<div className="ml-4">
+						{comment.children.map((child) => (
+							<CommentItem key={child.id} comment={child} onReply={onReply} />
+						))}
+					</div>
+				)}
+			</div>
+		);
 }
 
 export default function Comments({ postId }: { postId: number }) {
@@ -124,44 +126,39 @@ export default function Comments({ postId }: { postId: number }) {
   if (loading) return <div>Loading comments...</div>
 
   return (
-    <div>
-      <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
-        <MessageCircle /> Comments
-      </h3>
+			<div>
+				<h3 className="font-bold mb-4 flex items-center gap-2">
+					<MessageCircle /> Comments
+				</h3>
 
-      {!user ? (
-        <div className="p-4 bg-muted rounded text-center mb-6">
-          <p>Please <a href="/login" className="text-primary underline">login</a> to read or post comments.</p>
-        </div>
-      ) : (
-        <>
-           <div className="mb-8">
-             {replyTo && (
-               <div className="flex justify-between items-center mb-2 bg-muted p-2 rounded">
-                 <span className="text-sm">Replying to comment #{replyTo}</span>
-                 <Button variant="ghost" size="sm" onClick={() => setReplyTo(null)}>Cancel</Button>
-               </div>
-             )}
-             <Textarea
-               placeholder="Write a comment..."
-               value={content}
-               onChange={(e) => setContent(e.target.value)}
-               className="mb-2"
-             />
-             <Button onClick={handleSubmit}>Post Comment</Button>
-           </div>
+				{!user ? (
+					<div className="p-4 bg-muted rounded text-center mb-6">
+						<p>
+							Please{' '}
+							<a href="/login" className="text-primary underline">
+								login
+							</a>{' '}
+							to read or post comments.
+						</p>
+					</div>
+				) : (
+					<>
+						<div className="mb-8">
+							{replyTo && (
+								<div className="flex justify-between items-center mb-2 bg-muted p-2 rounded">
+									<span>Replying to comment #{replyTo}</span>
+									<Button variant="ghost" size="sm" onClick={() => setReplyTo(null)}>
+										Cancel
+									</Button>
+								</div>
+							)}
+							<Textarea placeholder="Write a comment..." value={content} onChange={(e) => setContent(e.target.value)} className="mb-2" />
+							<Button onClick={handleSubmit}>Post Comment</Button>
+						</div>
 
-           <div>
-             {comments.length === 0 ? (
-               <p className="text-muted-foreground">No comments yet.</p>
-             ) : (
-               comments.map(comment => (
-                 <CommentItem key={comment.id} comment={comment} onReply={setReplyTo} />
-               ))
-             )}
-           </div>
-        </>
-      )}
-    </div>
-  )
+						<div>{comments.length === 0 ? <p className="text-muted-foreground">No comments yet.</p> : comments.map((comment) => <CommentItem key={comment.id} comment={comment} onReply={setReplyTo} />)}</div>
+					</>
+				)}
+			</div>
+		);
 }

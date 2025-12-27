@@ -28,7 +28,7 @@ export default async function Home() {
 							<Card className="h-full transition-colors hover:bg-muted/50">
 								{post.featured_image && <img src={post.featured_image} alt={post.title} className="w-full h-48 object-cover rounded-t-xl" />}
 								<CardHeader>
-									<div className="text-sm text-muted-foreground mb-2">
+									<div className="text-muted-foreground mb-2">
 										{post.categories?.name} • {new Date(post.created_at).toLocaleDateString()}
 									</div>
 									<CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>

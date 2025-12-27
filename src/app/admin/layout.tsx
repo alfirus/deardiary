@@ -28,21 +28,28 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
-      <aside className="w-64 bg-muted p-6 hidden md:block border-r">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold">Admin Dashboard</h2>
-        </div>
-        <nav className="space-y-2">
-          <a href="/admin/posts" className="block p-2 hover:bg-background rounded">Posts</a>
-          <a href="/admin/categories" className="block p-2 hover:bg-background rounded">Categories</a>
-          <a href="/admin/media" className="block p-2 hover:bg-background rounded">Media</a>
-          <a href="/" className="block p-2 mt-4 hover:bg-background rounded text-muted-foreground">Back to Site</a>
-        </nav>
-      </aside>
-      <main className="flex-1 p-8">
-        {children}
-      </main>
-    </div>
-  )
+			<div className="flex min-h-screen">
+				<aside className="w-64 bg-muted p-6 hidden md:block border-r">
+					<div className="mb-6">
+						<h2 className="font-bold">Admin Dashboard</h2>
+					</div>
+					<nav className="space-y-2">
+						<a href="/admin/categories" className="block p-2 hover:bg-background rounded">
+							Categories
+						</a>
+						<a href="/admin/posts" className="block p-2 hover:bg-background rounded">
+							Posts
+						</a>
+
+						<a href="/admin/media" className="block p-2 hover:bg-background rounded">
+							Media
+						</a>
+						<a href="/" className="block p-2 mt-4 hover:bg-background rounded text-muted-foreground">
+							Back to Site
+						</a>
+					</nav>
+				</aside>
+				<main className="flex-1 p-8">{children}</main>
+			</div>
+		);
 }

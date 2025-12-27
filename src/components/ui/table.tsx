@@ -6,17 +6,10 @@ import { cn } from "@/lib/utils"
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
-    <div
-      data-slot="table-container"
-      className="relative w-full overflow-x-auto"
-    >
-      <table
-        data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
-        {...props}
-      />
-    </div>
-  )
+			<div data-slot="table-container" className="relative w-full overflow-x-auto">
+				<table data-slot="table" className={cn('w-full caption-bottom', className)} {...props} />
+			</div>
+		);
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
@@ -95,13 +88,7 @@ function TableCaption({
   className,
   ...props
 }: React.ComponentProps<"caption">) {
-  return (
-    <caption
-      data-slot="table-caption"
-      className={cn("text-muted-foreground mt-4 text-sm", className)}
-      {...props}
-    />
-  )
+  return <caption data-slot="table-caption" className={cn('text-muted-foreground mt-4', className)} {...props} />;
 }
 
 export {

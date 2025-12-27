@@ -83,39 +83,43 @@ export default function MediaClient({ media }: { media: any[] }) {
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Media</h1>
-        <div className="flex items-center gap-2">
-           <Input type="file" onChange={handleUpload} disabled={uploading} />
-           {uploading && <span>Uploading...</span>}
-        </div>
-      </div>
+			<div>
+				<div className="flex justify-between items-center mb-6">
+					<h1 className="font-bold">Media</h1>
+					<div className="flex items-center gap-2">
+						<Input type="file" onChange={handleUpload} disabled={uploading} />
+						{uploading && <span>Uploading...</span>}
+					</div>
+				</div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Preview</TableHead>
-            <TableHead>Filename</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {media?.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                <img src={item.url} alt={item.filename} className="w-16 h-16 object-cover rounded" />
-              </TableCell>
-              <TableCell>
-                <a href={item.url} target="_blank" className="text-blue-500 hover:underline">{item.filename}</a>
-              </TableCell>
-              <TableCell>
-                <Button variant="destructive" size="sm" onClick={() => handleDelete(item.id, item.url)}>Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  )
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>Preview</TableHead>
+							<TableHead>Filename</TableHead>
+							<TableHead>Actions</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{media?.map((item) => (
+							<TableRow key={item.id}>
+								<TableCell>
+									<img src={item.url} alt={item.filename} className="w-16 h-16 object-cover rounded" />
+								</TableCell>
+								<TableCell>
+									<a href={item.url} target="_blank" className="text-blue-500 hover:underline">
+										{item.filename}
+									</a>
+								</TableCell>
+								<TableCell>
+									<Button variant="destructive" size="sm" onClick={() => handleDelete(item.id, item.url)}>
+										Delete
+									</Button>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
+		);
 }

@@ -85,79 +85,87 @@ export default function CategoriesPage({ categories }: { categories: any[] }) {
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Categories</h1>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button>Add Category</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Category</DialogTitle>
-            </DialogHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} onChange={(e) => {
-                          field.onChange(e)
-                          // Auto-slug
-                          const slug = e.target.value.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "")
-                          form.setValue("slug", slug)
-                        }} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="slug"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Slug</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit">Create</Button>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      </div>
+			<div>
+				<div className="flex justify-between items-center mb-6">
+					<h1 className="font-bold">Categories</h1>
+					<Dialog open={open} onOpenChange={setOpen}>
+						<DialogTrigger asChild>
+							<Button>Add Category</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>Add Category</DialogTitle>
+							</DialogHeader>
+							<Form {...form}>
+								<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+									<FormField
+										control={form.control}
+										name="name"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Name</FormLabel>
+												<FormControl>
+													<Input
+														{...field}
+														onChange={(e) => {
+															field.onChange(e);
+															// Auto-slug
+															const slug = e.target.value
+																.toLowerCase()
+																.replace(/ /g, '-')
+																.replace(/[^\w-]+/g, '');
+															form.setValue('slug', slug);
+														}}
+													/>
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<FormField
+										control={form.control}
+										name="slug"
+										render={({ field }) => (
+											<FormItem>
+												<FormLabel>Slug</FormLabel>
+												<FormControl>
+													<Input {...field} />
+												</FormControl>
+												<FormMessage />
+											</FormItem>
+										)}
+									/>
+									<Button type="submit">Create</Button>
+								</form>
+							</Form>
+						</DialogContent>
+					</Dialog>
+				</div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Slug</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {categories?.map((category) => (
-            <TableRow key={category.id}>
-              <TableCell>{category.id}</TableCell>
-              <TableCell>{category.name}</TableCell>
-              <TableCell>{category.slug}</TableCell>
-              <TableCell>
-                <Button variant="destructive" size="sm" onClick={() => handleDelete(category.id)}>Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  )
+				<Table>
+					<TableHeader>
+						<TableRow>
+							<TableHead>ID</TableHead>
+							<TableHead>Name</TableHead>
+							<TableHead>Slug</TableHead>
+							<TableHead>Actions</TableHead>
+						</TableRow>
+					</TableHeader>
+					<TableBody>
+						{categories?.map((category) => (
+							<TableRow key={category.id}>
+								<TableCell>{category.id}</TableCell>
+								<TableCell>{category.name}</TableCell>
+								<TableCell>{category.slug}</TableCell>
+								<TableCell>
+									<Button variant="destructive" size="sm" onClick={() => handleDelete(category.id)}>
+										Delete
+									</Button>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</div>
+		);
 }
