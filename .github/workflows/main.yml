@@ -1,0 +1,69 @@
+name: Publish Website
+
+on: push
+
+jobs:
+  Fast-FTP-Action:
+    name: Fast FTP Action
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Backup Env Files
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: 22
+        script: |
+          mkdir -p /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/
+          cp /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/.env /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/ || true
+          cp /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/.env.local /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/ || true
+
+    - name: Clean Remote Directory
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: 22
+        script: |
+          rm -rf /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/
+          mkdir -p /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/
+
+    - name: Deploy via SCP
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: 22
+        source: "."
+        target: "/home/aerosgeotech-system/htdocs/system.aerosgeotech.com/"
+        strip_components: 0
+
+    - name: Execute Remote Commands
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        port: 22
+        script: |
+          # Restore Env Files
+          cp /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/.env /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/ || true
+          cp /home/aerosgeotech-system/htdocs/aerosgeotech-system_env_backup/.env.local /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/ || true
+          
+          # Load Environment
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          [ -s "$HOME/.bashrc" ] && source $HOME/.bashrc
+
+          # Build
+          cd /home/aerosgeotech-system/htdocs/system.aerosgeotech.com/
+          npm install
+          npm run build
+          pm2 reload all
