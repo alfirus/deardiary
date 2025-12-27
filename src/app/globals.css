@@ -122,7 +122,6 @@
   body {
     @apply bg-background text-foreground text-[16px];
   }
-  
 
   /* BlockNote overrides - inside layer base for cascade */
 }
@@ -161,4 +160,13 @@ h5 {
 }
 h6 {
   @apply text-base;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
