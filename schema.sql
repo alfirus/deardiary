@@ -124,7 +124,8 @@ create policy "Only admins can manage media."
   using ( exists ( select 1 from profiles where id = auth.uid() and role = 'admin' ) );
 
 -- Trigger to create profile on signup
-create function public.handle_new_user()
+-- Trigger to create profile on signup
+create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer set search_path = public
@@ -145,6 +146,7 @@ begin
 end;
 $$;
 
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
