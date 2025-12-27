@@ -19,10 +19,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 			<article className="max-w-3xl mx-auto">
 				{post.featured_image && <img src={post.featured_image} alt={post.title} className="w-full h-64 md:h-96 object-cover rounded-xl mb-8" />}
 				<div className="text-center mb-8">
+					<h1 className="font-bold mb-0">{post.title}</h1>
 					<div className="text-muted-foreground mb-2">
 						{post.categories?.name} • {new Date(post.created_at).toLocaleDateString()} • By {post.profiles?.display_name || 'Unknown'}
 					</div>
-					<h1 className="font-bold mb-4">{post.title}</h1>
 				</div>
 
 				<div className="max-w-none mb-12">

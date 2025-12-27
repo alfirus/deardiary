@@ -140,6 +140,19 @@
 }
 
 /* Global overrides outside layer to ensure specificity */
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary), 0 0 15px var(--primary);
+  }
+  50% {
+    text-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary), 0 0 30px var(--primary);
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  animation: glow-pulse 3s infinite ease-in-out;
+}
+
 :root, body {
   --bn-font-family: var(--font-caveat), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
