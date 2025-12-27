@@ -9,8 +9,9 @@ import { Button } from '@/components/ui/button';
 import PostForm from '@/components/post-form';
 import ActionButtons from '@/components/action-buttons';
 import DataTable from '@/components/data-table';
+import AdminCard from '@/components/admin-card';
+import AdminHeader from '@/components/admin-header';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function PostsClient({ posts, categories }: { posts: any[]; categories: any[] }) {
 	const [open, setOpen] = useState(false);
@@ -59,8 +60,7 @@ export default function PostsClient({ posts, categories }: { posts: any[]; categ
 
 	return (
 		<div>
-			<div className="flex justify-between items-center mb-6">
-				<h1 className="font-bold">Posts</h1>
+			<AdminHeader title="Posts">
 				<Dialog open={open} onOpenChange={setOpen}>
 					<DialogTrigger asChild>
 						<Button>Add Post</Button>
@@ -72,7 +72,7 @@ export default function PostsClient({ posts, categories }: { posts: any[]; categ
 						<PostForm categories={categories} onSuccess={() => setOpen(false)} />
 					</DialogContent>
 				</Dialog>
-			</div>
+			</AdminHeader>
 
 			{/* Desktop View */}
 			<div className="hidden md:block rounded-md border">
@@ -82,26 +82,16 @@ export default function PostsClient({ posts, categories }: { posts: any[]; categ
 			{/* Mobile View */}
 			<div className="grid gap-4 md:hidden">
 				{posts?.map((post) => (
-					<Card key={post.id}>
-						<CardHeader>
-							<CardTitle>{post.title}</CardTitle>
-						</CardHeader>
-						<CardContent className="space-y-2">
-							<div className="flex justify-between text-sm">
-								<span className="text-muted-foreground">Slug:</span>
-								<span className="font-mono">{post.slug}</span>
-							</div>
-							<div className="flex justify-between text-sm">
-								<span className="text-muted-foreground">Status:</span>
-								<span>{post.published ? 'Published' : 'Draft'}</span>
-							</div>
-						</CardContent>
-						<CardFooter>
-							<div className="flex justify-end w-full">
-								<ActionButtons viewUrl={`/posts/${post.slug}`} editUrl={`/admin/posts/${post.id}`} onDelete={() => handleDelete(post.id)} />
-							</div>
-						</CardFooter>
-					</Card>
+					<AdminCard key={post.id} title={post.title} footer={<ActionButtons viewUrl={`/posts/${post.slug}`} editUrl={`/admin/posts/${post.id}`} onDelete={() => handleDelete(post.id)} />}>
+						<div className="flex justify-between text-sm">
+							<span className="text-muted-foreground">Slug:</span>
+							<span className="font-mono">{post.slug}</span>
+						</div>
+						<div className="flex justify-between text-sm">
+							<span className="text-muted-foreground">Status:</span>
+							<span>{post.published ? 'Published' : 'Draft'}</span>
+						</div>
+					</AdminCard>
 				))}
 			</div>
 		</div>
