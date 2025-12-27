@@ -157,6 +157,13 @@
   font-family: var(--font-caveat), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
 
+[data-blocknote-editor],
+.bn-editor,
+.bn-block-content p,
+.bn-inline-content {
+  font-size: var(--text-base) !important;
+}
+
 h1 {
   @apply text-4xl;
 }
