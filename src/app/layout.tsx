@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Caveat } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { ReCaptchaProvider } from "@/components/recaptcha-provider";
+import { Roboto, Caveat } from 'next/font/google';
+import './globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
+import { ReCaptchaProvider } from '@/components/recaptcha-provider';
 
 const caveat = Caveat({
-  subsets: ["latin"],
-  variable: "--font-caveat",
+	subsets: ['latin'],
+	variable: '--font-caveat',
 });
 
 export const metadata: Metadata = {
@@ -21,20 +21,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${caveat.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ReCaptchaProvider>
-            {children}
-            <Toaster />
-          </ReCaptchaProvider>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+			<html lang="en" suppressHydrationWarning>
+				<body className={`${caveat.className} ${caveat.variable} antialiased`}>
+					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+						<ReCaptchaProvider>
+							{children}
+							<Toaster />
+						</ReCaptchaProvider>
+					</ThemeProvider>
+				</body>
+			</html>
+		);
 }

@@ -143,6 +143,7 @@
 .ProseMirror * {
   font-family: var(--font-caveat), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
 }
+
 h1 {
   @apply text-4xl;
 }
@@ -160,13 +161,4 @@ h5 {
 }
 h6 {
   @apply text-base;
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
