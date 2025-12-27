@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import PublicLayout from "@/components/public-layout"
 import { notFound } from "next/navigation"
 import Comments from "@/components/comments"
-import PostContent from '@/components/post-content';
+
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
 	const { slug } = await params;
@@ -24,11 +24,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 						{post.categories?.name} • {new Date(post.created_at).toLocaleDateString()} • By {post.profiles?.display_name || 'Unknown'}
 					</div>
 				</div>
-
-				<div className="max-w-none mb-12">
-					<PostContent content={post.content} />
+				<div>
+					<div dangerouslySetInnerHTML={{ __html: post.content }}></div>
 				</div>
-
 				<hr className="my-8" />
 
 				<Comments postId={post.id} />

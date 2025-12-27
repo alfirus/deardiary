@@ -1,8 +1,9 @@
 "use client";
 
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteView } from "@blocknote/mantine";
-import "@blocknote/mantine/style.css";
+import { useEffect } from 'react';
+import { useCreateBlockNote } from '@blocknote/react';
+import { BlockNoteView } from '@blocknote/mantine';
+import '@blocknote/mantine/style.css';
 import { useTheme } from 'next-themes';
 
 import { cn } from '@/lib/utils';
@@ -15,35 +16,45 @@ interface EditorProps {
 }
 
 export default function Editor({ onChange, initialContent, editable = true, className }: EditorProps) {
-	const editor = useCreateBlockNote({
-		initialContent: initialContent
-			? (() => {
-					try {
-						return JSON.parse(initialContent);
-					} catch (e) {
-						// Fallback for plain text or invalid JSON
-						return [
-							{
-								type: 'paragraph',
-								content: initialContent,
-							},
-						];
-					}
-			  })()
-			: undefined,
-	});
+	const editor = useCreateBlockNote();
+
+	useEffect(() => {
+		async function loadContent() {
+			if (!initialContent) return;
+
+			// Try parsing as JSON first (backward compatibility)
+			try {
+				const jsonBlocks = JSON.parse(initialContent);
+				if (Array.isArray(jsonBlocks)) {
+					editor.replaceBlocks(editor.document, jsonBlocks);
+					return;
+				}
+			} catch (e) {
+				// Not valid JSON, proceed to HTML parsing
+			}
+
+			// Parse as HTML
+			const htmlBlocks = await editor.tryParseHTMLToBlocks(initialContent);
+			editor.replaceBlocks(editor.document, htmlBlocks);
+		}
+
+		loadContent();
+	}, [editor]); // Only rely on editor which is stable, ignores updates to initialContent after mount to emulate 'initial' behavior
 
 	const { resolvedTheme } = useTheme();
 	// Map "system" or undefined to light/dark
 	const currentTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
 
 	return (
-		<div className={cn('border rounded-md p-4 min-h-[300px]', className)}>
+		<div className={cn(className)}>
 			<BlockNoteView
 				editor={editor}
 				editable={editable}
-				onChange={() => {
-					onChange?.(JSON.stringify(editor.document));
+				onChange={async () => {
+					if (onChange) {
+						const html = await editor.blocksToFullHTML(editor.document);
+						onChange(html);
+					}
 				}}
 				theme={currentTheme}
 			/>
