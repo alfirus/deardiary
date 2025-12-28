@@ -1,14 +1,9 @@
 import { createClient } from "@/lib/supabase/server"
 import PublicLayout from "@/components/public-layout"
-import { MobileCategoriesDrawer } from '@/components/mobile-categories-drawer';
-import Link from "next/link"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { MobileDrawer } from '@/components/mobile-drawer';
+import { Sidebar } from '@/components/sidebar';
+import Link from 'next/link';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { DatabaseStatusCheck } from '@/components/database-status-check';
 
@@ -19,25 +14,19 @@ export default async function Home() {
 	/* Fetch categories */
 	const { data: categories } = await supabase.from('categories').select('*').order('name');
 
+	const sidebar = {
+		categories: categories || [],
+	};
+
 	return (
 		<PublicLayout>
 			<DatabaseStatusCheck />
 
-			<MobileCategoriesDrawer categories={categories || []} />
+			<MobileDrawer content={sidebar} />
 
 			<div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-8">
-				{/* Categories Grid - Desktop Only */}
-				<section className="hidden md:block">
-					<h2 className="text-2xl font-bold mb-6">Categories</h2>
-					<div className="flex flex-col gap-4">
-						{categories?.map((category) => (
-							<Link key={category.id} href={`/categories/${category.slug || '#'}`} className="block">
-								{category.name}
-							</Link>
-						))}
-						{categories?.length === 0 && <div className="col-span-full text-center py-4 text-muted-foreground">No categories found.</div>}
-					</div>
-				</section>
+				{/* Sidebar: Profile & Categories */}
+				<Sidebar content={sidebar} />
 
 				{/* Posts Grid */}
 				<section>

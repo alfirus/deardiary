@@ -3,6 +3,10 @@ create table if not exists profiles (
   id uuid references auth.users not null primary key,
   display_name text,
   avatar_url text,
+  facebook_url text,
+  twitter_url text,
+  github_url text,
+  telegram_username text,
   role text default 'user', -- 'admin' or 'user'
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
