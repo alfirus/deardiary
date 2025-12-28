@@ -14,8 +14,12 @@ export default async function Home() {
 	/* Fetch categories */
 	const { data: categories } = await supabase.from('categories').select('*').order('name');
 
+	/* Fetch admin profile */
+	const { data: profile } = await supabase.from('profiles').select('*').eq('role', 'admin').single();
+
 	const sidebar = {
 		categories: categories || [],
+		profile: profile || null,
 	};
 
 	return (

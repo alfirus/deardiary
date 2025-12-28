@@ -14,18 +14,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { SidebarContent } from "@/components/sidebar-content"
-
-interface Category {
-  id: number
-  name: string
-  slug: string
-  created_at: string
-}
-
-interface SidebarData {
-  categories: Category[]
-}
+import { SidebarContent, SidebarData } from '@/components/sidebar-content';
 
 interface MobileDrawerProps {
   content: SidebarData
