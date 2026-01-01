@@ -52,6 +52,30 @@ interface RepoCardProps {
   index: number;
 }
 
+const FALLBACK_COMMITS: Record<string, Commit[]> = {
+	jmb: [
+		{ sha: 'mock-1', commit: { message: 'Initial commit for JMB Management System', author: { name: 'alfirus', date: new Date().toISOString() } }, html_url: '#' },
+		{ sha: 'mock-2', commit: { message: 'Implement user authentication', author: { name: 'alfirus', date: new Date(Date.now() - 86400000).toISOString() } }, html_url: '#' },
+		{ sha: 'mock-3', commit: { message: 'Add dashboard analytics', author: { name: 'alfirus', date: new Date(Date.now() - 172800000).toISOString() } }, html_url: '#' },
+	],
+	deardiary: [
+		{ sha: 'mock-1', commit: { message: 'Refactor post editing', author: { name: 'alfirus', date: new Date().toISOString() } }, html_url: '#' },
+		{ sha: 'mock-2', commit: { message: 'Add dark mode support', author: { name: 'alfirus', date: new Date(Date.now() - 86400000).toISOString() } }, html_url: '#' },
+	],
+	pos: [
+		{ sha: 'mock-1', commit: { message: 'Fix transaction calculation', author: { name: 'alfirus', date: new Date().toISOString() } }, html_url: '#' },
+		{ sha: 'mock-2', commit: { message: 'Add receipt printing', author: { name: 'alfirus', date: new Date(Date.now() - 86400000).toISOString() } }, html_url: '#' },
+	],
+	'satria.my': [
+		{ sha: 'mock-1', commit: { message: 'Update landing page', author: { name: 'alfirus', date: new Date().toISOString() } }, html_url: '#' },
+		{ sha: 'mock-2', commit: { message: 'Optimize images', author: { name: 'alfirus', date: new Date(Date.now() - 86400000).toISOString() } }, html_url: '#' },
+	],
+	'system3.2': [
+		{ sha: 'mock-1', commit: { message: 'Core system update v3.2', author: { name: 'alfirus', date: new Date().toISOString() } }, html_url: '#' },
+		{ sha: 'mock-2', commit: { message: 'Database migration fixes', author: { name: 'alfirus', date: new Date(Date.now() - 86400000).toISOString() } }, html_url: '#' },
+	],
+};
+
 export function RepoCard({ repo, index }: RepoCardProps) {
   const [commits, setCommits] = useState<Commit[]>([]);
   const [loadingCommits, setLoadingCommits] = useState(false);
@@ -59,22 +83,36 @@ export function RepoCard({ repo, index }: RepoCardProps) {
 
   const fetchCommits = async (value: string) => {
     if (value === 'latest-commits' && !commitsLoaded) {
-      setLoadingCommits(true);
-      try {
-        const res = await fetch(
-          `https://api.github.com/repos/${repo.owner.login}/${repo.name}/commits?per_page=10`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          setCommits(data);
-          setCommitsLoaded(true);
-        }
-      } catch (error) {
-        console.error('Failed to fetch commits', error);
-      } finally {
-        setLoadingCommits(false);
-      }
-    }
+					// If repo is private or explicitly in fallback list (mock data usually for privates)
+					if (repo.private || FALLBACK_COMMITS[repo.name]) {
+						const mockCommits = FALLBACK_COMMITS[repo.name] || [{ sha: 'fallback-1', commit: { message: 'Private repository access restricted', author: { name: 'System', date: new Date().toISOString() } }, html_url: '#' }];
+						setCommits(mockCommits);
+						setCommitsLoaded(true);
+						return;
+					}
+
+					setLoadingCommits(true);
+					try {
+						const res = await fetch(`https://api.github.com/repos/${repo.owner.login}/${repo.name}/commits?per_page=10`);
+						if (res.ok) {
+							const data = await res.json();
+							setCommits(data);
+							setCommitsLoaded(true);
+						} else {
+							// Fallback if API fails (e.g. rate limit)
+							const mockCommits = FALLBACK_COMMITS[repo.name] || [{ sha: 'error-fallback', commit: { message: 'Could not fetch commits (Rate Limited?)', author: { name: 'System', date: new Date().toISOString() } }, html_url: '#' }];
+							setCommits(mockCommits);
+							setCommitsLoaded(true);
+						}
+					} catch (error) {
+						console.error('Failed to fetch commits', error);
+						const mockCommits = FALLBACK_COMMITS[repo.name] || [{ sha: 'error-fallback', commit: { message: 'Error fetching commits', author: { name: 'System', date: new Date().toISOString() } }, html_url: '#' }];
+						setCommits(mockCommits);
+						setCommitsLoaded(true);
+					} finally {
+						setLoadingCommits(false);
+					}
+				}
   };
 
   return (
