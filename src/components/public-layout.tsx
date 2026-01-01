@@ -13,32 +13,32 @@ export default async function PublicLayout({
 
   return (
 			<div className="min-h-screen flex flex-col">
-				<header className="border-b">
-					<div className="container mx-auto px-4 h-16 flex items-center justify-between">
-						<Link href="/" className="font-bold">
+				<header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+					<div className="container mx-auto px-4 h-14 flex items-center justify-between">
+						<Link href="/" className="font-bold text-lg">
 							Alfirus
 						</Link>
 						<nav className="flex items-center gap-4">
 							<ModeToggle />
 							{user ? (
 								<>
-									<span className="text-muted-foreground">{user.email}</span>
+									<span className="text-muted-foreground text-sm hidden md:inline">{user.email}</span>
 									<form action="/auth/signout" method="post">
-										<Button variant="outline" type="submit">
+										<Button variant="outline" type="submit" size="sm">
 											Logout
 										</Button>
 									</form>
 								</>
 							) : (
 								<Link href="/login">
-									<Button>Login</Button>
+									<Button size="sm">Login</Button>
 								</Link>
 							)}
 						</nav>
 					</div>
 				</header>
-				<main className="flex-1 container mx-auto px-4 py-8">{children}</main>
-				<footer className="border-t py-6 text-center text-muted-foreground">© 2024 Blog App</footer>
+				<main className="flex-1">{children}</main>
+				<footer className="border-t py-4 text-center text-sm text-muted-foreground bg-muted/30">© {new Date().getFullYear()} Alfirus. Built with Next.js & Tailwind CSS.</footer>
 			</div>
 		);
 }
